@@ -10,7 +10,7 @@ const port = process.env.PORT || 2000;
 app.use(cors());
 app.use(express.json());
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
   "mongodb+srv://shreyo00:NLMKV4i1HkxZ6J4Z@cluster0.qczjssr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
@@ -29,7 +29,9 @@ async function run() {
     const createCollections = client
       .db("shreyoDB")
       .collection("createContract");
+    const patientsCollections = client.db("shreyoDB").collection("patients");
 
+    /***************Contracts Backend****************************/
     app.post("/contracts", async (req, res) => {
       const contract = req.body;
       const result = await createCollections.insertOne(contract);
@@ -38,6 +40,25 @@ async function run() {
 
     app.get("/contracts", async (req, res) => {
       const result = await createCollections.find().toArray();
+      res.send(result);
+    });
+
+    app.delete("/contracts/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await addToCartCollections.deleteOne(query);
+      res.send(result);
+    });
+
+    /***************Patients Backend****************************/
+    app.get("/patients", async (req, res) => {
+      const result = await patientsCollections.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/patient", async (req, res) => {
+      const patient = req.body;
+      const result = await patientsCollections.insertOne(patient);
       res.send(result);
     });
 
