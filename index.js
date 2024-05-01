@@ -30,6 +30,9 @@ async function run() {
       .db("shreyoDB")
       .collection("createContract");
     const patientsCollections = client.db("shreyoDB").collection("patients");
+    const visitorsCollections = client.db("shreyoDB").collection("visitors");
+    const rolesCollections = client.db("shreyoDB").collection("roles");
+    const usersCollections = client.db("shreyoDB").collection("users");
 
     /***************Contracts Backend****************************/
     app.post("/contracts", async (req, res) => {
@@ -59,6 +62,42 @@ async function run() {
     app.post("/patient", async (req, res) => {
       const patient = req.body;
       const result = await patientsCollections.insertOne(patient);
+      res.send(result);
+    });
+
+    /***************Hove Visitors Backend****************************/
+    app.get("/visitors", async (req, res) => {
+      const result = await visitorsCollections.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/visitor", async (req, res) => {
+      const visitor = req.body;
+      const result = await visitorsCollections.insertOne(visitor);
+      res.send(result);
+    });
+
+    /***************Roles Backend****************************/
+    app.get("/roles", async (req, res) => {
+      const result = await rolesCollections.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/role", async (req, res) => {
+      const role = req.body;
+      const result = await rolesCollections.insertOne(visitor);
+      res.send(result);
+    });
+
+    /***************Users Backend****************************/
+    app.get("/users", async (req, res) => {
+      const result = await usersCollections.find().toArray();
+      res.send(result);
+    });
+
+    app.post("/user", async (req, res) => {
+      const user = req.body;
+      const result = await usersCollections.insertOne(user);
       res.send(result);
     });
 
